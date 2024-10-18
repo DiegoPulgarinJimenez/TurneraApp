@@ -38,7 +38,7 @@ class MyTurneraAppViewModel : ViewModel() {
     private val _participants = mutableStateListOf<Participant>()
     val participants: List<Participant> = _participants
 
-    private var _currentTurnIndex by mutableIntStateOf(0)
+    private var _currentTurnIndex by mutableStateOf(0)
     val currentTurnIndex: Int get() = _currentTurnIndex
 
     fun addParticipant(name: String) {
@@ -87,15 +87,18 @@ fun MyTurneraApp(viewModel: MyTurneraAppViewModel = viewModel()) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            TvLazyColumn(
+            LazyColumn(
                 modifier = Modifier
                     .weight(1f)
                     .padding(vertical = 8.dp)
             ) {
-                items(viewModel.participants) { participant ->
+                items(viewModel.participants, key = { participant -> participant.id }) { participant ->
+                    val participantIndex = viewModel.participants.indexOf(participant)
+                    val isCurrentTurn = viewModel.participants.indexOf(participant) == viewModel.currentTurnIndex
                     ParticipantItem(
                         participant = participant,
-                        isCurrentTurn = viewModel.participants.indexOf(participant) == viewModel.currentTurnIndex
+                        // isCurrentTurn = viewModel.participants.indexOf(participant) == viewModel.currentTurnIndex
+                        isCurrentTurn = isCurrentTurn
                     )
                 }
             }
@@ -139,8 +142,11 @@ fun ParticipantItem(participant: Participant, isCurrentTurn: Boolean) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        color = if (isCurrentTurn) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-        shape = MaterialTheme.shapes.medium
+            color = if (isCurrentTurn) Color(0xff4d0066)
+                    else MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium
+
+            //color = if (isCurrentTurn) MaterialTheme.colorScheme.primaryContainer
+                    //else MaterialTheme.colorScheme.surfaceVariant, shape = MaterialTheme.shapes.medium
     ) {
         Text(
             text = participant.name,
