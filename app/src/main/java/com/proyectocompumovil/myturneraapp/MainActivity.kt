@@ -74,9 +74,15 @@ fun MyTurneraApp(viewModel: MyTurneraAppViewModel = viewModel()) {
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
+        // Usar un Row para dividir la pantalla en dos
+        Row(
+            modifier = Modifier.fillMaxSize()
+        ){
+        // Parte izquierda: Lista de funcionalidades
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .weight(1f)
+                //.fillMaxSize()
                 .padding(32.dp)
         ) {
             Text(
@@ -138,6 +144,19 @@ fun MyTurneraApp(viewModel: MyTurneraAppViewModel = viewModel()) {
                 }
             }
         }
+
+        // Parte derecha: Reproductor multimedia
+        Box(
+            modifier = Modifier
+                .weight(1f) // Asigna el otro 50% del ancho
+                .fillMaxHeight()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            // Aquí es donde se agregará el reproductor multimedia
+            // VideoPlayer(url = "https://www.youtube.com/embed/dQw4w9WgXcQ")
+        }
+    }
 
         if (isAddingParticipant) {
             AddParticipantDialog(
