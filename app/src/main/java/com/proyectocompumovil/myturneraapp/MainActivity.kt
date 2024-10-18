@@ -11,7 +11,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -83,10 +86,21 @@ fun MyTurneraApp(viewModel: MyTurneraAppViewModel = viewModel()) {
             )
 
             Text(
-                text = "Current Turn: ${viewModel.participants.getOrNull(viewModel.currentTurnIndex)?.name ?: "No participants"}",
+                text = buildAnnotatedString {
+                    append("Current Turn: ")
+                    withStyle(style = SpanStyle(color = Color(0xff9900cc))) { // Cambia el color solo del nombre
+                        append(viewModel.participants.getOrNull(viewModel.currentTurnIndex)?.name ?: "No participants")
+                    }
+                },
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+
+            /*Text(
+                text = "Current Turn: ${viewModel.participants.getOrNull(viewModel.currentTurnIndex)?.name ?: "No participants"}",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )*/
 
             LazyColumn(
                 modifier = Modifier
