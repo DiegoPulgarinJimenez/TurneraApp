@@ -54,6 +54,7 @@ class MyTurneraAppViewModel : ViewModel() {
 
     fun resetTurns() {
         if (_participants.isNotEmpty()) {
+            _participants.clear()
             _currentTurnIndex = 0
         }
     }
