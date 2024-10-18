@@ -4,9 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
@@ -14,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.ExperimentalTvMaterial3Api
-import com.proyectocompumovil.myturneraapp.ui.theme.MyTurneraAppTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalTvMaterial3Api::class)
@@ -22,7 +26,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyTurneraAppTheme {
-                MyTurneraAppApp()
+                MyTurneraApp()
             }
         }
     }
@@ -34,25 +38,31 @@ class MyTurneraAppViewModel : ViewModel() {
     private val _participants = mutableStateListOf<Participant>()
     val participants: List<Participant> = _participants
 
-    private var _currentTurnIndex by mutableStateOf(0)
-    val currentTurnIndex: Int = _currentTurnIndex
+    private var _currentTurnIndex by mutableIntStateOf(0)
+    val currentTurnIndex: Int get() = _currentTurnIndex
 
     fun addParticipant(name: String) {
         _participants.add(Participant(id = _participants.size.toString(), name = name))
     }
 
     fun nextTurn() {
-        _currentTurnIndex = (_currentTurnIndex + 1) % _participants.size
+        if (_participants.isNotEmpty()) {
+            _currentTurnIndex = (_currentTurnIndex + 1) % _participants.size
+        }
     }
 
+
     fun resetTurns() {
-        _currentTurnIndex = 0
+        if (_participants.isNotEmpty()) {
+            _currentTurnIndex = 0
+        }
     }
+
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun MyTurneraAppApp(viewModel: MyTurneraAppViewModel = viewModel()) {
+fun MyTurneraApp(viewModel: MyTurneraAppViewModel = viewModel()) {
     var isAddingParticipant by remember { mutableStateOf(false) }
     var newParticipantName by remember { mutableStateOf("") }
 
@@ -99,7 +109,10 @@ fun MyTurneraAppApp(viewModel: MyTurneraAppViewModel = viewModel()) {
                 Button(onClick = { isAddingParticipant = true }) {
                     Text("Add Participant")
                 }
-                Button(onClick = { viewModel.nextTurn() }) {
+                Button(
+                    onClick = { viewModel.nextTurn() },
+                    enabled = viewModel.participants.size > 1
+                ) {
                     Text("Next Turn")
                 }
                 Button(onClick = { viewModel.resetTurns() }) {
