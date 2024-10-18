@@ -1,5 +1,6 @@
 package com.proyectocompumovil.myturneraapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +23,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.tv.foundation.lazy.list.TvLazyColumn
 import androidx.tv.foundation.lazy.list.items
 import androidx.tv.material3.ExperimentalTvMaterial3Api
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.ui.viewinterop.AndroidView
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalTvMaterial3Api::class)
@@ -53,7 +57,6 @@ class MyTurneraAppViewModel : ViewModel() {
             _currentTurnIndex = (_currentTurnIndex + 1) % _participants.size
         }
     }
-
 
     fun resetTurns() {
         if (_participants.isNotEmpty()) {
@@ -154,7 +157,7 @@ fun MyTurneraApp(viewModel: MyTurneraAppViewModel = viewModel()) {
             contentAlignment = Alignment.Center
         ) {
             // Aquí es donde se agregará el reproductor multimedia
-            // VideoPlayer(url = "https://www.youtube.com/embed/dQw4w9WgXcQ")
+            VideoPlayer(url = "https://youtu.be/ROgcM9-N9jM?si=rvEq-IAZPyFlZ4Vl")
         }
     }
 
@@ -234,5 +237,20 @@ fun MyTurneraAppTheme(content: @Composable () -> Unit) {
             bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp)
         ),
         content = content
+    )
+}
+
+@SuppressLint("SetJavaScriptEnabled")
+@Composable
+fun VideoPlayer(url: String) {
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                settings.javaScriptEnabled = true
+                webViewClient = WebViewClient()
+                loadUrl(url)
+            }
+        },
+        modifier = Modifier.fillMaxSize()
     )
 }
