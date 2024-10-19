@@ -86,6 +86,17 @@ dependencies {
     implementation (libs.androidx.activity.compose.v172)
     implementation (libs.androidx.lifecycle.viewmodel.compose)
 
+    // Retrofit for network requests
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0") // Para manejar JSON
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Retrofit with Kotlin serialization Converter
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+    // Kotlin serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // Debugging and testing tools
     debugImplementation (libs.androidx.ui.tooling.v143)
